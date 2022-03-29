@@ -13,10 +13,15 @@
 
       <div>
         <p>Destination Address</p>
-        <input type="text" id="destination" v-model="destinationAddress" />
+        <input
+          type="text"
+          id="destination"
+          @click="transfer"
+          v-model="destinationAddress"
+        />
       </div>
 
-      <button @click="transfer">Transfer</button>
+      <button>Transfer</button>
     </div>
   </div>
 </template>

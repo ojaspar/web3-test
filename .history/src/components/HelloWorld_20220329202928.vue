@@ -2,21 +2,21 @@
   <div class="layout">
     <div class="card">
       <div>
-        <p>Contact Address</p>
+        <label for="contact">Contact Address</label>
         <input type="text" id="contact" v-model="contractAddress" />
       </div>
 
       <div>
-        <p>Amount</p>
+        <label for="amount">Amount</label>
         <input type="text" id="amount" v-model="amount" />
       </div>
 
       <div>
-        <p>Destination Address</p>
+        <label for="destination">Destination Address</label>
         <input type="text" id="destination" v-model="destinationAddress" />
       </div>
 
-      <button @click="transfer">Transfer</button>
+      <button>Transfer</button>
     </div>
   </div>
 </template>
@@ -28,7 +28,7 @@ import { onMounted, ref } from 'vue';
 export default {
   setup() {
     const ABI = ref(data);
-    const contractAddress = ref('');
+    const contractAddress = ref('0x78536177b32FCcaF12b98EEb33e8e815D4DD1712');
     const destinationAddress = ref('');
     const amount = ref('');
 
@@ -42,6 +42,7 @@ export default {
     const loadWeb3 = async () => {
       await initialLoadWeb3();
       window.contract = await loadContract();
+      await transfer();
     };
 
     const loadContract = async () => {
@@ -52,14 +53,16 @@ export default {
     };
 
     const transfer = async () => {
-      await new window.contract.methods.transfer(destinationAddress, 0).send({
-        from: window.ethereum.selectedAddress,
-      });
+      const tx = await new window.contract.methods.transfer(
+        '0x86C12A724340f3F4F6142789808874d0A55B',
+        0
+      ).send({ from: window.ethereum.selectedAddress });
+      console.log(tx);
     };
     onMounted(() => {
       loadWeb3();
     });
-    return { destinationAddress, amount, contractAddress, ABI, transfer };
+    return { destinationAddress, amount, contractAddress, ABI };
   },
 };
 </script>
@@ -75,27 +78,19 @@ export default {
   box-shadow: 6px 6px 54px #0000000d;
   border-radius: 14px;
   display: flex;
-  /* justify-content: center; */
+  justify-content: center;
   flex-direction: column;
   width: 500px;
   padding: 20px;
 }
 input {
   height: 40px;
-  width: 100%;
+  width: 100px;
   outline: none;
   border: 1px solid blue;
   border-radius: 10px;
 }
 label {
   width: 100%;
-}
-button {
-  height: 40px;
-  width: 100%;
-  border: 1px solid blue;
-  border-radius: 10px;
-  margin: 20px 0;
-  cursor: pointer;
 }
 </style>
